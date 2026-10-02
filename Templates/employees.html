@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Employees</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="bg-light">
+
+
+    <!-- Flash Messages -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }} alert-dismissible fade show"
+                     role="alert">
+
+                    {{ message }}
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-dark bg-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="/">
+                Employee Management System
+            </a>
+
+            <a href="/add" class="btn btn-primary">
+                + Add Employee
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <div class="container mt-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h1>
+                Employees
+            </h1>
+
+            <a href="/"
+               class="btn btn-outline-secondary">
+                Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- Search and Filter -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-body">
+
+                <form method="GET"
+                      action="/employees">
+
+                    <div class="row g-3">
+
+
+                        <!-- Search -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+                                Search
+                            </label>
+
+                            <input
+                                type="text"
+                                name="search"
+                                class="form-control"
+                                placeholder="Search by name, email or designation"
+                                value="{{ search }}"
+                            >
+
+                        </div>
+
+
+                        <!-- Department -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+                                Department
+                            </label>
+
+                            <select
+                                name="department"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    All Departments
+                                </option>
+
+                                {% for dept in departments %}
+
+                                    <option
+                                        value="{{ dept[0] }}"
+                                        {% if selected_department == dept[0] %}
+                                            selected
+                                        {% endif %}
+                                    >
+
+                                        {{ dept[0] }}
+
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+                        
+                        <!-- Status -->
+
+<div class="col-md-2">
+
+    <label class="form-label">
+        Status
+    </label>
+
+    <select
+        name="status"
+        class="form-select"
+    >
+
+        <option
+            value=""
+            {% if selected_status == "" %}
+                selected
+            {% endif %}
+        >
+            All
+        </option>
+
+        <option
+            value="Active"
+            {% if selected_status == "Active" %}
+                selected
+            {% endif %}
+        >
+            Active
+        </option>
+
+        <option
+            value="Inactive"
+            {% if selected_status == "Inactive" %}
+                selected
+            {% endif %}
+        >
+            Inactive
+        </option>
+
+    </select>
+
+</div>
+
+                        <!-- Sort By -->
+
+                        <div class="col-md-2">
+
+                            <label class="form-label">
+                                Sort By
+                            </label>
+
+                            <select
+                                name="sort"
+                                class="form-select"
+                            >
+
+                                <option
+                                    value="id_asc"
+                                    {% if selected_sort == "id_asc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Oldest First
+                                </option>
+
+                                <option
+                                    value="id_desc"
+                                    {% if selected_sort == "id_desc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Newest First
+                                </option>
+
+                                <option
+                                    value="name_asc"
+                                    {% if selected_sort == "name_asc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Name A-Z
+                                </option>
+
+                                <option
+                                    value="name_desc"
+                                    {% if selected_sort == "name_desc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Name Z-A
+                                </option>
+
+                                <option
+                                    value="salary_desc"
+                                    {% if selected_sort == "salary_desc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Highest Salary
+                                </option>
+
+                                <option
+                                    value="salary_asc"
+                                    {% if selected_sort == "salary_asc" %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Lowest Salary
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Search Button -->
+
+                        <div class="col-md-2 d-flex align-items-end">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100"
+                            >
+                                Search
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Employee Table -->
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover table-bordered align-middle">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Age</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>Salary</th>
+                                <th>Joining Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for employee in employees.items %}
+
+                            <tr>
+
+                                <td>
+                                    {{ employee.id }}
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        {{ employee.name }}
+                                    </strong>
+
+                                </td>
+
+                                <td>
+                                    {{ employee.email }}
+                                </td>
+
+                                <td>
+                                    {{ employee.phone }}
+                                </td>
+
+                                <td>
+                                    {{ employee.age }}
+                                </td>
+
+                                <td>
+
+                                    <span class="badge text-bg-secondary">
+                                        {{ employee.department }}
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    {{ employee.designation }}
+                                </td>
+
+                                <td>
+                                    ₹{{ "%.0f"|format(employee.salary) }}
+                                </td>
+
+                                <td>
+    {{ employee.joining_date }}
+</td>
+
+<td>
+
+    {% if employee.status == "Active" %}
+
+        <span class="badge bg-success">
+            Active
+        </span>
+
+    {% else %}
+
+        <span class="badge bg-danger">
+            Inactive
+        </span>
+
+    {% endif %}
+
+</td>
+
+<td>
+    <div class="d-flex gap-2">
+
+                                        <!-- Edit -->
+
+                                        <a
+                                            href="/employee/{{ employee.id }}"
+                                            class="btn btn-sm btn-info"
+                                        >
+                                            View
+                                        </a>
+
+                                        <a
+                                            href="/edit/{{ employee.id }}"
+                                            class="btn btn-sm btn-warning"
+                                        >
+                                            Edit
+                                        </a>
+
+
+                                        <!-- Delete -->
+
+                                        <form
+                                            method="POST"
+                                            action="/delete/{{ employee.id }}"
+                                            onsubmit="return confirm('Are you sure you want to delete this employee?');"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-danger"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="11"
+                                    class="text-center py-4"
+                                >
+                                    No employees found.
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Pagination -->
+
+                {% if employees.pages > 1 %}
+
+                <nav aria-label="Employee pagination">
+
+                    <ul class="pagination justify-content-center mt-4">
+
+
+                        <!-- Previous -->
+
+                        <li class="page-item
+                            {% if not employees.has_prev %}
+                                disabled
+                            {% endif %}"
+                        >
+
+                            {% if employees.has_prev %}
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'view_employees',
+                                        page=employees.prev_num,
+                                        search=search,
+                                        department=selected_department,
+                                        sort=selected_sort
+                                    ) }}"
+                                >
+                                    Previous
+                                </a>
+
+                            {% else %}
+
+                                <span class="page-link">
+                                    Previous
+                                </span>
+
+                            {% endif %}
+
+                        </li>
+
+
+                        <!-- Page Numbers -->
+
+                        {% for page_num in employees.iter_pages() %}
+
+                            {% if page_num %}
+
+                                <li class="page-item
+                                    {% if page_num == employees.page %}
+                                        active
+                                    {% endif %}"
+                                >
+
+                                    <a
+                                        class="page-link"
+                                        href="{{ url_for(
+                                            'view_employees',
+                                            page=page_num,
+                                            search=search,
+                                            department=selected_department,
+                                            sort=selected_sort
+                                        ) }}"
+                                    >
+
+                                        {{ page_num }}
+
+                                    </a>
+
+                                </li>
+
+                            {% else %}
+
+                                <li class="page-item disabled">
+
+                                    <span class="page-link">
+                                        ...
+                                    </span>
+
+                                </li>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+
+                        <!-- Next -->
+
+                        <li class="page-item
+                            {% if not employees.has_next %}
+                                disabled
+                            {% endif %}"
+                        >
+
+                            {% if employees.has_next %}
+
+                                <a
+                                    class="page-link"
+                                    href="{{ url_for(
+                                        'view_employees',
+                                        page=employees.next_num,
+                                        search=search,
+                                        department=selected_department,
+                                        sort=selected_sort
+                                    ) }}"
+                                >
+                                    Next
+                                </a>
+
+                            {% else %}
+
+                                <span class="page-link">
+                                    Next
+                                </span>
+
+                            {% endif %}
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- Back to Dashboard -->
+
+        <div class="text-center mt-4 mb-5">
+
+            <a href="/"
+               class="btn btn-outline-dark">
+                Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>

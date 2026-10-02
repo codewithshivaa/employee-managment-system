@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Employee Details</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="bg-light">
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-dark bg-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand" href="/">
+                Employee Management System
+            </a>
+
+            <a href="/employees"
+               class="btn btn-outline-light">
+
+                Back to Employees
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <div class="container mt-5">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-primary text-white">
+
+                <h3 class="mb-0">
+                    Employee Details
+                </h3>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="row">
+
+
+                    <!-- Name -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Name
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.name }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Email
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.email }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Phone
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.phone }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Age -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Age
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.age }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Department -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Department
+                        </strong>
+
+                        <p class="form-control bg-light">
+
+                            <span class="badge text-bg-secondary">
+
+                                {{ employee.department }}
+
+                            </span>
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Designation -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Designation
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.designation }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Salary -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Salary
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            ₹{{ "%.0f"|format(employee.salary) }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Joining Date -->
+
+                    <div class="col-md-6 mb-4">
+
+                        <strong>
+                            Joining Date
+                        </strong>
+
+                        <p class="form-control bg-light">
+                            {{ employee.joining_date }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="mt-3">
+
+                    <a
+                        href="/edit/{{ employee.id }}"
+                        class="btn btn-warning"
+                    >
+                        Edit Employee
+                    </a>
+
+                    <a
+                        href="/employees"
+                        class="btn btn-secondary"
+                    >
+                        Back
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
