@@ -40,18 +40,45 @@
 {% endwith %}
 
 <!-- Navbar -->
-
 <nav class="navbar navbar-dark bg-dark">
 
     <div class="container">
 
-        <a class="navbar-brand" href="/">
+        <a
+            class="navbar-brand"
+            href="{{ url_for('dashboard') }}"
+        >
             Employee Management System
         </a>
 
-        <a href="/employees" class="btn btn-outline-light">
-            View Employees
-        </a>
+        <div class="d-flex align-items-center">
+
+            <span class="text-white me-3">
+                Welcome, {{ session["username"] }}
+            </span>
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-secondary me-2"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('view_employees') }}"
+                class="btn btn-secondary me-2"
+            >
+                View Employees
+            </a>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-danger"
+            >
+                Logout
+            </a>
+
+        </div>
 
     </div>
 

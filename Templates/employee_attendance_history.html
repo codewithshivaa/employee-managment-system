@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Attendance History</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+</head>
+
+<body class="bg-light">
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-dark bg-dark text-dark">
+
+    <div class="container">
+
+        <a
+            class="navbar-brand fw-bold"
+            href="{{ url_for('employee_dashboard') }}"
+        >
+            Employee Management System
+        </a>
+
+        <div class="d-flex align-items-center">
+
+            <span class="text-white me-3">
+                Welcome, {{ employee.name }}
+            </span>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-outline-light btn-sm"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="container py-4">
+
+    <!-- PAGE HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                My Attendance History
+            </h2>
+
+            <p class="text-muted mb-0">
+                View your previous attendance records and working hours.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('employee_dashboard') }}"
+            class="btn btn-info"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ================= FILTER ================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                action="{{ url_for('attendance_history') }}"
+                class="row g-3 align-items-end"
+            >
+
+                <div class="col-md-5">
+
+                    <label class="form-label fw-semibold">
+                        Filter by Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="history_date"
+                        class="form-control"
+                        value="{{ request.args.get('history_date', '') }}"
+                    >
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button
+                        type="submit"
+                        class="btn btn-info w-100"
+                    >
+                        Apply Filter
+                    </button>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <a
+                        href="{{ url_for('attendance_history') }}"
+                        class="btn btn-info w-100"
+                    >
+                        Clear
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ATTENDANCE TABLE ================= -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-info text-white py-3">
+
+            <h5 class="mb-0">
+                Attendance Records
+            </h5>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th class="px-4">
+                                Date
+                            </th>
+
+                            <th>
+                                Punch In
+                            </th>
+
+                            <th>
+                                Punch Out
+                            </th>
+
+                            <th>
+                                Working Hours
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in attendance_history %}
+
+                        <tr>
+
+                            <td class="px-4 fw-semibold">
+
+                                {{ item.record.date.strftime('%d-%m-%Y') }}
+
+                            </td>
+
+                            <td>
+
+                                {% if item.record.punch_in %}
+
+                                    {{ item.record.punch_in.strftime('%I:%M:%S %p') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if item.record.punch_out %}
+
+                                    {{ item.record.punch_out.strftime('%I:%M:%S %p') }}
+
+                                {% else %}
+
+                                    -
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {{ item.working_hours }}
+
+                            </td>
+
+                            <td>
+
+                                {% if item.record.status == "Present" %}
+
+                                    <span class="badge bg-success">
+                                        Present
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger">
+                                        {{ item.record.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="text-center text-muted py-5"
+                            >
+
+                                No attendance history available.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+</body>
+
+</html>

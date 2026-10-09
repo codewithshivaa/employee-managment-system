@@ -17,7 +17,9 @@ with app.app_context():
 
     admin = User(
         username="admin",
-        password=password_hash
+        password=password_hash,
+        role="admin",
+        employee_id=None
     )
 
     db.session.add(admin)

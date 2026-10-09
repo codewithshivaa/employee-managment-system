@@ -77,6 +77,13 @@
                 Employees
             </h1>
 
+            <a
+                href="{{ url_for('export_employees') }}"
+                class="btn btn-success"
+            >
+                Export CSV
+            </a>
+
             <a href="/"
                class="btn btn-outline-secondary">
                 Dashboard
@@ -154,7 +161,7 @@
                         
                         <!-- Status -->
 
-<div class="col-md-2">
+<div class="col-md-3">
 
     <label class="form-label">
         Status
@@ -165,13 +172,8 @@
         class="form-select"
     >
 
-        <option
-            value=""
-            {% if selected_status == "" %}
-                selected
-            {% endif %}
-        >
-            All
+        <option value="">
+            All Status
         </option>
 
         <option
@@ -194,8 +196,7 @@
 
     </select>
 
-</div>
-
+</div>  
                         <!-- Sort By -->
 
                         <div class="col-md-2">
@@ -270,7 +271,7 @@
 
                         <!-- Search Button -->
 
-                        <div class="col-md-2 d-flex align-items-end">
+                        <div class="col-md-1 d-flex align-items-end">
 
                             <button
                                 type="submit"
@@ -425,6 +426,37 @@
                                             </button>
 
                                         </form>
+
+                                        <form
+    method="POST"
+    action="{{ url_for('toggle_employee_status', id=employee.id) }}"
+    class="d-inline"
+>
+
+    <button
+        type="submit"
+        class="btn btn-sm
+        {% if employee.status == 'Active' %}
+            btn-secondary
+        {% else %}
+            btn-success
+        {% endif %}"
+        onclick="return confirm('Change employee status?')"
+    >
+
+        {% if employee.status == "Active" %}
+
+            Deactivate
+
+        {% else %}
+
+            Activate
+
+        {% endif %}
+
+    </button>
+
+</form>
 
                                     </div>
 

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Employee Dashboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+</head>
+
+
+<body class="bg-light">
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-dark bg-dark">
+
+    <div class="container">
+
+        <span class="navbar-brand fw-semibold">
+            Employee Management System
+        </span>
+
+        <div class="d-flex align-items-center">
+
+            <span class="text-white me-3">
+                Welcome, {{ employee.name }}
+            </span>
+
+            <a
+                href="{{ url_for('logout') }}"
+                class="btn btn-outline-light btn-sm"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN CONTAINER ================= -->
+
+<div class="container py-4">
+
+
+    <!-- ================= PAGE HEADER ================= -->
+
+    <div class="mb-4">
+
+        <h2 class="fw-semibold mb-1">
+            Employee Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage your attendance, leave requests and profile.
+        </p>
+
+    </div>
+
+
+    <!-- ================= EMPLOYEE INFORMATION ================= -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-primary text-white py-3">
+
+            <h5 class="mb-0">
+                My Information
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Name -->
+
+                <div class="col-md-6 col-lg-3 mb-3">
+
+                    <small class="text-muted">
+                        Name
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.name }}
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="col-md-6 col-lg-3 mb-3">
+
+                    <small class="text-muted">
+                        Email
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.email }}
+                    </div>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="col-md-6 col-lg-3 mb-3">
+
+                    <small class="text-muted">
+                        Phone
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.phone }}
+                    </div>
+
+                </div>
+
+
+                <!-- Age -->
+
+                <div class="col-md-6 col-lg-3 mb-3">
+
+                    <small class="text-muted">
+                        Age
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.age }}
+                    </div>
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <small class="text-muted">
+                        Department
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.department }}
+                    </div>
+
+                </div>
+
+
+                <!-- Designation -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <small class="text-muted">
+                        Designation
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.designation }}
+                    </div>
+
+                </div>
+
+
+                <!-- Joining Date -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <small class="text-muted">
+                        Joining Date
+                    </small>
+
+                    <div class="fw-semibold">
+                        {{ employee.joining_date }}
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-6 col-lg-3">
+
+                    <small class="text-muted">
+                        Status
+                    </small>
+
+                    <div>
+
+                        {% if employee.status == "Active" %}
+
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-danger">
+                                Inactive
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<!-- ================= ACTION CARDS ================= -->
+
+<div class="row g-4">
+
+    <!-- ================= MY PROFILE ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0">
+                    My Profile
+                </h5>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+
+                <p class="text-muted">
+                    View and manage your personal profile information.
+                </p>
+
+                <div class="mt-auto">
+
+                    <a
+                        href="{{ url_for('my_profile') }}"
+                        class="btn btn-primary"
+                    >
+                        View Profile
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MY ATTENDANCE ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-success text-white py-3">
+                <h5 class="mb-0">
+                    My Attendance
+                </h5>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+
+                <p class="text-muted">
+                    Mark your attendance and view today's attendance status.
+                </p>
+
+                <div class="mt-auto">
+
+                    <a
+                        href="{{ url_for('my_attendance') }}"
+                        class="btn btn-success"
+                    >
+                        View Attendance
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= LEAVE MANAGEMENT ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-warning text-dark text-white py-3">
+                <h5 class="mb-0">
+                    Leave Management
+                </h5>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+
+                <p class="text-muted">
+                    Apply for leave and manage your leave requests.
+                </p>
+
+                <div class="mt-auto">
+
+                    <a
+                        href="{{ url_for('apply_leave') }}"
+                        class="btn btn-warning me-2"
+                    >
+                        Apply for Leave
+                    </a>
+
+                    <a
+                        href="{{ url_for('my_leaves') }}"
+                        class="btn btn-outline-warning"
+                    >
+                        My Leave & Balance
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ATTENDANCE HISTORY ================= -->
+
+    <div class="col-lg-6">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-header bg-info text-white py-3">
+                <h5 class="mb-0">
+                    My Attendance History
+                </h5>
+            </div>
+
+            <div class="card-body d-flex flex-column">
+
+                <p class="text-muted">
+                    View your previous attendance records,
+                    working hours and attendance status.
+                </p>
+
+                <div class="mt-auto">
+
+                    <a
+                        href="/attendance-history"
+                        class="btn btn-info"
+                    >
+                        View Attendance History
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= BOOTSTRAP JS ================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
